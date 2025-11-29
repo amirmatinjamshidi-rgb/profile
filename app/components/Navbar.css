@@ -1,0 +1,44 @@
+.navbar-container {
+  position: relative;
+  width: 550px;
+  height: 80px;
+  background: #181818;
+  border-radius: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.nav-item {
+  color: #b0bfd8;
+  text-transform: uppercase;
+  font-size: 14px;
+  height: 80px;
+  width: 100px;
+  display: grid;
+  align-items: end;
+  text-align: center;
+  cursor: pointer;
+  transition: .4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  position: relative;
+}
+
+.nav-item.active {
+  color: white;
+}
+
+.selector {
+  position: absolute;
+  bottom: 40px;
+  width: 90px;
+  height: 90px;
+  border-radius: 100%;
+  background:
+    radial-gradient(circle at 50% 50%, #ffffff88 30px, transparent 45px),
+    radial-gradient(circle at 50% 50%, var(--sel) 0 45px, transparent 50px),
+    radial-gradient(circle at 50% 75px, #181818 0 70px, transparent 71px);
+  border: 18px solid #181818;
+  transition: .55s cubic-bezier(0.68,-0.55,0.27,1.55);
+  z-index: -1;
+}

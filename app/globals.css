@@ -19,6 +19,27 @@
   }
 }
 
+.navbar-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: black;
+}
+
+
+
+@keyframes floatSoft {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+header {
+  animation: floatSoft 3s ease-in-out infinite;
+}
+
+
 body {
   background: var(--background);
   color: var(--foreground);
