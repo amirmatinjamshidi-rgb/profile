@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion } from "framer-motion";
@@ -33,20 +34,16 @@ export default function Contact() {
 
           <div className="flex gap-5 pt-4">
             <SocialLink
-              icon="fa-github"
-              link="https://github.com/Saboo24"
+              icon="/git.png"
+              link="https://github.com/amirmatinjamshidi-rgb"
               color="text-gray-300 hover:text-white"
             />
             <SocialLink
-              icon="fa-linkedin"
-              link="https://www.linkedin.com/in/amine-hamzaoui-a2453a35b"
+              icon="/link.png"
+              link="https://www.linkedin.com/in/matin-jamshidy-88593137b/"
               color="text-blue-500 hover:text-blue-300"
             />
-            <SocialLink
-              icon="fa-whatsapp"
-              link="https://wa.me/213554139526"
-              color="text-green-500 hover:text-green-300"
-            />
+
           </div>
         </div>
 
@@ -113,6 +110,8 @@ function ContactItem({ icon, text }: ContactItemProps) {
 }
 
 function SocialLink({ icon, link, color }: SocialLinkProps) {
+  const isImage = icon.endsWith(".png") || icon.endsWith(".jpg") || icon.endsWith(".jpeg") || icon.endsWith(".svg");
+
   return (
     <motion.a
       whileHover={{ scale: 1.15 }}
@@ -120,11 +119,14 @@ function SocialLink({ icon, link, color }: SocialLinkProps) {
       target="_blank"
       className={`text-3xl transition ${color}`}
     >
-      <i className={`fa-brands ${icon}`} />
+      {isImage ? (
+        <img src={icon} alt="social icon" className="w-9 h-9 rounded-lg" />
+      ) : (
+        <i className={`fa-brands ${icon}`} />
+      )}
     </motion.a>
   );
 }
-
 function FormInput({ label }: FormInputProps) {
   return (
     <TextField

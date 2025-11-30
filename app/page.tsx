@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import Contact from "./components/contact";
 import Services from "./components/Services";
-
+import Image from "next/image";
 export default function Home() {
   return (
     <>
@@ -11,17 +11,49 @@ export default function Home() {
 
         <section
           id="Home"
-          className="min-h-screen flex items-center justify-center px-6 animate-on-scroll"
-        >
+          className="min-h-screen flex items-center justify-center px-6 animate-on-scroll gap-12"
+        >   <Image src="/me.webp" alt="pfp" height={460} width={460} className="flex items-center justify-center animate-on-scroll rounded-3xl " />
           <div className="text-center space-y-8">
+         
             <h1 className="text-5xl md:text-7xl font-bold animate-on-scroll">
               Amir Matin Jamshidi
             </h1>
             <p className="text-2xl md:text-4xl text-green-400 animate-on-scroll">
-              Full-Stack Developer
+              Front-End Developer
             </p>
-            <p className="text-gray-400 mt-8 max-w-2xl mx-auto text-lg leading-relaxed animate-on-scroll">
-              Crafting fast, beautiful, and powerful web experiences with modern tech.
+                  <p className="font-sans text-center max-w-3xl">
+              I’m a Software Engineer who loves transforming ideas into
+              reliable, scalable products. Over time, I’ve explored several
+              technologies and found my passion in building high-performance
+              systems and intuitive user experiences.
+              <br />
+              <br />
+              I’m proficient in
+              <i>
+                <b className="purple">
+                  {" "}
+                  JavaScript, C++, Rust, Node.js, and Java{" "}
+                </b>
+              </i>
+              — and I enjoy working across both backend and frontend stacks.
+              <br />
+              <br />
+              My key areas of interest include developing
+              <i>
+                <b className="text-purple-700">
+                  {" "}
+                  Web Applications, Blockchain Solutions,{" "}
+                </b>
+              </i>
+              and exploring new ways to bridge on-chain and off-chain systems.
+              <br />
+              <br />
+              Whenever possible, I love building projects with
+              <b className="text-purple-700"> Node.js </b> and modern frameworks like{" "}
+              <i>
+                <b className="text-purple-700">React.js</b> and{" "}
+                <b className="text-purple-700">Next.js</b>.
+              </i>
             </p>
           </div>
         </section>
