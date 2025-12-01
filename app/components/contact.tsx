@@ -1,11 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion } from "framer-motion";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
 export default function Contact() {
+  const { register, handleSubmit, reset } = useForm();
+
+  const onSubmit = async (data: unknown) => {
+    await axios.post("/api/contact", data);
+    reset();
+  };
+
   return (
     <div className="w-full flex justify-center py-32 px-6 bg-black">
       <motion.div
@@ -43,7 +53,6 @@ export default function Contact() {
               link="https://www.linkedin.com/in/matin-jamshidy-88593137b/"
               color="text-blue-500 hover:text-blue-300"
             />
-
           </div>
         </div>
 
@@ -53,31 +62,58 @@ export default function Contact() {
           transition={{ delay: 0.3 }}
           className="space-y-6"
         >
-          <FormInput label="Your Name" />
-          <FormInput label="Your Email" />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-          <textarea
-            placeholder="Your Message"
-            className="w-full h-40 p-4 bg-black rounded-xl border border-gray-700
-                       text-gray-200 outline-none focus:border-indigo-500 
-                       transition"
-          />
+            <TextField
+              {...register("name")}
+              fullWidth
+              label="Your Name"
+              InputLabelProps={{ style: { color: "#9ca3af" } }}
+              sx={{
+                "& .MuiInputBase-input": { color: "white" },
+                "& fieldset": { borderColor: "#4c4c4c" },
+                "&:hover fieldset": { borderColor: "#6366f1" },
+              }}
+            />
 
-          <Button
-            variant="contained"
-            size="large"
-            fullWidth
-            sx={{
-              bgcolor: "#16a34a",
-              paddingY: "12px",
-              borderRadius: "12px",
-              fontWeight: "bold",
-              "&:hover": { bgcolor: "#22c55e" },
-              boxShadow: "0px 4px 12px rgba(34,197,94,0.4)",
-            }}
-          >
-            SEND MESSAGE
-          </Button>
+            <TextField
+              {...register("email")}
+              fullWidth
+              label="Your Email"
+              InputLabelProps={{ style: { color: "#9ca3af" } }}
+              sx={{
+                "& .MuiInputBase-input": { color: "white" },
+                "& fieldset": { borderColor: "#4c4c4c" },
+                "&:hover fieldset": { borderColor: "#6366f1" },
+              }}
+            />
+
+            <textarea
+              {...register("message")}
+              placeholder="Your Message"
+              className="w-full h-40 p-4 bg-black rounded-xl border border-gray-700
+                         text-gray-200 outline-none focus:border-indigo-500 
+                         transition"
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              fullWidth
+              sx={{
+                bgcolor: "#16a34a",
+                paddingY: "12px",
+                borderRadius: "12px",
+                fontWeight: "bold",
+                "&:hover": { bgcolor: "#22c55e" },
+                boxShadow: "0px 4px 12px rgba(34,197,94,0.4)",
+              }}
+            >
+              SEND MESSAGE
+            </Button>
+
+          </form>
         </motion.div>
       </motion.div>
     </div>
@@ -99,7 +135,6 @@ type FormInputProps = {
   label: string;
 };
 
-
 function ContactItem({ icon, text }: ContactItemProps) {
   return (
     <div className="flex items-center gap-3 text-gray-300">
@@ -110,7 +145,11 @@ function ContactItem({ icon, text }: ContactItemProps) {
 }
 
 function SocialLink({ icon, link, color }: SocialLinkProps) {
-  const isImage = icon.endsWith(".png") || icon.endsWith(".jpg") || icon.endsWith(".jpeg") || icon.endsWith(".svg");
+  const isImage =
+    icon.endsWith(".png") ||
+    icon.endsWith(".jpg") ||
+    icon.endsWith(".jpeg") ||
+    icon.endsWith(".svg");
 
   return (
     <motion.a
@@ -125,19 +164,5 @@ function SocialLink({ icon, link, color }: SocialLinkProps) {
         <i className={`fa-brands ${icon}`} />
       )}
     </motion.a>
-  );
-}
-function FormInput({ label }: FormInputProps) {
-  return (
-    <TextField
-      fullWidth
-      label={label}
-      InputLabelProps={{ style: { color: "#9ca3af" } }}
-      sx={{
-        "& .MuiInputBase-input": { color: "white" },
-        "& fieldset": { borderColor: "#4c4c4c" },
-        "&:hover fieldset": { borderColor: "#6366f1" },
-      }}
-    />
   );
 }

@@ -44,7 +44,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* opacity: 0;
+  animation: fadeIn 50ms ease forwards; */
 }
+
+/* @keyframes FadeIn {
+ from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} */
+
 @keyframes fadeUp {
   from {
     opacity: 0;
