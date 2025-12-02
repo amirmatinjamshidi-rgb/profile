@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 import Image from "next/image";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
@@ -56,16 +58,22 @@ export default function Navbar() {
         className={`
           relative px-7 py-4 overflow-hidden rounded-2xl font-semibold text-lg
           transition-all duration-500 group
-          ${isActive ? "scale-105 shadow-2xl shadow-red-600/50" : "hover:scale-105"}
+          ${
+            isActive
+              ? "scale-105 shadow-2xl shadow-red-600/50"
+              : "hover:scale-105"
+          }
         `}
       >
         <span
           className={`
             absolute inset-0 bg-linear-to-r opacity-0 group-hover:opacity-100
             transition-opacity duration-500
-            ${isActive
-              ? "from-red-600 via-pink-600 to-purple-700 opacity-100"
-              : "from-green-500 via-emerald-500 to-teal-600"}
+            ${
+              isActive
+                ? "from-red-600 via-pink-600 to-purple-700 opacity-100"
+                : "from-green-500 via-emerald-500 to-teal-600"
+            }
           `}
         />
 
@@ -78,7 +86,13 @@ export default function Navbar() {
         />
 
         <span className="relative z-10">
-          <span className={isActive ? "text-white drop-shadow-lg" : "text-gray-300 group-hover:text-white"}>
+          <span
+            className={
+              isActive
+                ? "text-white drop-shadow-lg"
+                : "text-gray-300 group-hover:text-white"
+            }
+          >
             {name}
           </span>
         </span>
@@ -98,7 +112,10 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 mx-auto max-w-6xl bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-indigo-900/30 py-4 md:top-6 md:rounded-3xl">
       <div className="px-6 flex items-center justify-between">
-        <button onClick={() => scrollToSection("Home")} className="flex items-center gap-3">
+        <button
+          onClick={() => scrollToSection("Home")}
+          className="flex items-center gap-3"
+        >
           <Image
             src="/batman-icon.jpg"
             alt="Logo"
@@ -107,12 +124,18 @@ export default function Navbar() {
             height={40}
             className="rounded-full shadow-lg shadow-yellow-500/60"
           />
-          <span className="text-white font-bold text-xl hidden sm:block">AMIR MATIN</span>
+          <span className="text-white font-bold text-xl hidden sm:block">
+            AMIR MATIN
+          </span>
         </button>
 
         <nav className="hidden md:flex items-center gap-2">
           {navItems.map((item) => (
-            <NavButton key={item.id} name={item.name} id={item.id} />
+            <NavButton
+              key={item.id}
+              name={item.name}
+              id={item.id}
+            />
           ))}
         </nav>
 
@@ -140,7 +163,9 @@ export default function Navbar() {
                   }`}
                 >
                   {item.name}
-                  {isActive && <span className="ml-4 text-red-400 text-sm">Current</span>}
+                  {isActive && (
+                    <span className="ml-4 text-red-400 text-sm">Current</span>
+                  )}
                 </button>
               );
             })}
