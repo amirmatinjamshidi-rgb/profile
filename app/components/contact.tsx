@@ -49,7 +49,6 @@ export default function Contact() {
             <ContactItem icon="fa-phone" text="+98 912 074 2295" />
             <ContactItem icon="fa-location-dot" text="Theran, Iran" />
           </div>
-
           <div className="flex gap-5 pt-4">
             <SocialLink icon="/git.png" link="https://github.com/amirmatinjamshidi-rgb" color="text-gray-300 hover:text-white" />
             <SocialLink icon="/link.png" link="https://www.linkedin.com/in/matin-jamshidy-88593137b/" color="text-blue-500 hover:text-blue-300" />
@@ -58,7 +57,6 @@ export default function Contact() {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="space-y-6">
           <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
-
             <TextField
               {...register("name", { required: "Name is required" })}
               fullWidth

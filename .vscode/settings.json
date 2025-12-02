@@ -1,0 +1,6 @@
+{
+    "prettier.experimentalTernaries": true,
+    "prettier.insertPragma": true,
+    "prettier.singleAttributePerLine": true,
+    "prettier.vueIndentScriptAndStyle": true
+}
