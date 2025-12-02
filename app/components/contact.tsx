@@ -93,7 +93,7 @@ export default function Contact() {
             <textarea
               {...register("message", { required: "Message is required" })}
               placeholder="Your Message"
-              className={`w-full h-40 p-4 bg-black rounded-xl border border-gray-700 text-gray-200 outline-none focus:border-indigo-500 transition ${errors.message ? "border-red-500" : ""}`}
+              className={`w-full h-40 p-4 bg-black rounded-xl border border-gray-700 hover:border-black text-gray-200 outline-none focus:border-indigo-500 transition ${errors.message ? "border-red-500" : ""}`}
             />
             {errors.message && <p className="text-red-500 text-sm">{errors.message.message}</p>}
 

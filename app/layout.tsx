@@ -19,6 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <head>
+        <link rel="preload" href="https://portfolio-psi-seven-3r7sq2kz7p.vercel.app/" />
+        
         <link
           rel="preload"
           href="/batman-icon.svg"
