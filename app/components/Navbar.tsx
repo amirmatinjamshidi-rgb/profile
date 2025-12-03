@@ -71,7 +71,7 @@ export default function Navbar() {
             transition-opacity duration-500
             ${
               isActive
-                ? "from-red-600 via-pink-600 to-purple-700 opacity-100"
+                ? "from-cyan-500 via-blue-600 to-indigo-700 opacity-100"
                 : "from-green-500 via-emerald-500 to-teal-600"
             }
           `}
@@ -96,15 +96,6 @@ export default function Navbar() {
             {name}
           </span>
         </span>
-
-        <span
-          className={`
-            absolute bottom-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-red-500 rounded-full
-            shadow-[0_0_20px_#ef4444] 
-            transition-all duration-700
-            ${isActive ? "scale-100 opacity-100" : "scale-0 opacity-0"}
-          `}
-        />
       </button>
     );
   };
