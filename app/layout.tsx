@@ -1,5 +1,6 @@
-import "./globals.css";
+/** @format */
 
+import "./globals.css";
 
 export const metadata = {
   title: "Amir Matin Jamshidi",
@@ -17,10 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" >
+    <html lang="en">
       <head>
-        <link rel="preload" href="https://portfolio-psi-seven-3r7sq2kz7p.vercel.app/" />
-        
+        <link
+          rel="preload"
+          href="https://portfolio-psi-seven-3r7sq2kz7p.vercel.app/"
+        />
+
         <link
           rel="preload"
           href="/batman-icon.svg"

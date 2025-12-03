@@ -59,7 +59,6 @@ function Services() {
     group-hover:before:left-0
   "
         >
-          {/* Icon: Ties to card's view trigger */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}

@@ -100,7 +100,7 @@ export default function Navbar() {
         <span
           className={`
             absolute bottom-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-red-500 rounded-full
-            shadow-[0_0_20px_#ef4444] blur-sm
+            shadow-[0_0_20px_#ef4444] 
             transition-all duration-700
             ${isActive ? "scale-100 opacity-100" : "scale-0 opacity-0"}
           `}
@@ -110,7 +110,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 mx-auto max-w-6xl bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-indigo-900/30 py-4 md:top-6 md:rounded-3xl">
+    <header className="fixed inset-x-1 top-0 z-50 mx-auto max-w-[800px] bg-transparent border border-white/15 shadow-2xl shadow-indigo-900/30 py-4 md:top-6 md:rounded-3xl">
       <div className="px-6 flex items-center justify-between">
         <button
           onClick={() => scrollToSection("Home")}
@@ -124,9 +124,6 @@ export default function Navbar() {
             height={40}
             className="rounded-full shadow-lg shadow-yellow-500/60"
           />
-          <span className="text-white font-bold text-xl hidden sm:block">
-            AMIR MATIN
-          </span>
         </button>
 
         <nav className="hidden md:flex items-center gap-2">
@@ -148,7 +145,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <nav className="md:hidden bg-black/95 backdrop-blur-2xl border-t border-gray-800">
+        <nav className="md:hidden bg-black/95 border-t border-gray-800">
           <div className="px-6 py-6 flex flex-col gap-3">
             {navItems.map((item) => {
               const isActive = currentSection === item.id;
@@ -156,10 +153,7 @@ export default function Navbar() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-left px-6 py-4 rounded-xl text-lg font-medium transition-all ${
-                    isActive
-                      ? "bg-red-900/40 text-white border border-red-500/60 shadow-2xl shadow-red-600/40"
-                      : "text-gray-300 hover:text-white hover:bg-white/5"
+                  className={`text-left px-6 py-4 rounded-xl text-lg font-medium transition-all 
                   }`}
                 >
                   {item.name}

@@ -35,20 +35,19 @@ export default function Contact() {
   };
 
   return (
-    <div className="w-full flex justify-center py-32 px-6 bg-black">
+    <div className="w-full flex justify-center py-32 px-6 bg-transparent">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }} // No delay here—triggers as whole
+        transition={{ duration: 0.5 }}
         whileHover={{ scale: 1.05 }}
         viewport={{ once: true, margin: "-90px" }}
         className="flex flex-col gap-12 max-w-2xl w-full bg-black p-10 rounded-3xl shadow-lg shadow-indigo-800/50 border border-indigo-500/30"
       >
-        {/* Header section: Contact info + socials */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }} // Light stagger after main
+          transition={{ duration: 0.5, delay: 0.1 }}
           viewport={{ once: true }}
           className="space-y-6"
         >
@@ -94,7 +93,7 @@ export default function Contact() {
             />
             <ContactItem
               icon="fa-location-dot"
-              text="Theran, Iran"
+              text="Tehran, Iran"
             />
           </motion.div>
           <motion.div
@@ -116,11 +115,10 @@ export default function Contact() {
           </motion.div>
         </motion.div>
 
-        {/* Form section: Staggered field reveals */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }} // Later stagger for form
+          transition={{ duration: 0.5, delay: 0.7 }}
           viewport={{ once: true }}
           className="space-y-6"
         >
@@ -128,7 +126,7 @@ export default function Contact() {
             onSubmit={handleSubmit(onSubmit, onError)}
             className="space-y-6"
           >
-            <motion.div // Wrap for name field stagger
+            <motion.div
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.8 }}
@@ -148,7 +146,7 @@ export default function Contact() {
               />
             </motion.div>
 
-            <motion.div // Email field
+            <motion.div
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.9 }}
@@ -174,7 +172,7 @@ export default function Contact() {
               />
             </motion.div>
 
-            <motion.div // Message textarea
+            <motion.div
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 1.0 }}
