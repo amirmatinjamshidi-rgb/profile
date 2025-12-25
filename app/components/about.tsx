@@ -2,61 +2,66 @@
 
 "use client";
 import { motion } from "framer-motion";
-import CodeIcon from "@mui/icons-material/Code";
-import SchoolIcon from "@mui/icons-material/School";
-import CloudQueueSharpIcon from "@mui/icons-material/CloudQueueSharp";
-import PermContactCalendarRoundedIcon from "@mui/icons-material/PermContactCalendarRounded";
 
-const aboutBox = [
+const stackGroups = [
   {
-    id: 1,
-    name: "Languages",
-    discription: "JS, TS, JAVA, C#",
-    icon: <CodeIcon />,
+    category: "Languages & Core",
+    skills: ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3/SCSS"],
+    color: "from-[#006466]",
+    delay: 0.1,
   },
   {
-    id: 2,
-    name: "Education",
-    discription: "Bachelor's at Azad University",
-    icon: <SchoolIcon />,
+    category: "Frameworks & Library",
+    skills: ["Next.js 15", "React.js", "Three.js", "Astro"],
+    color: "from-[#0b525b]",
+    delay: 0.2,
   },
   {
-    id: 3,
-    name: "Projects",
-    discription: "3+ Products, 2 Contributions",
-    icon: <CloudQueueSharpIcon />,
+    category: "State & Data",
+    skills: ["Redux Toolkit", "Zustand", "React Query", "Context API"],
+    color: "from-[#3e1f47]",
+    delay: 0.3,
   },
   {
-    id: 4,
-    name: "Skills",
-    discription: "React, Next.js, Tailwind",
-    icon: <PermContactCalendarRoundedIcon />,
+    category: "Design & UI",
+    skills: ["Tailwind CSS", "Framer Motion", "Material UI", "Shadcn/ui"],
+    color: "from-[#4d194d]",
+    delay: 0.4,
   },
 ];
 
-function About() {
+export default function TechStack() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      {aboutBox.map((cat) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+      {stackGroups.map((group) => (
         <motion.div
-          key={cat.id}
-          whileHover={{ y: -10 }}
-          className="relative group p-8 rounded-2xl bg-[#1b3a4b]/40 border border-white/5 backdrop-blur-sm overflow-hidden"
+          key={group.category}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: group.delay }}
+          viewport={{ once: true }}
+          className="group relative p-px rounded-3xl bg-linear-to-br from-white/10 to-transparent hover:from-[#006466] transition-all duration-500"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-[#006466] to-[#4d194d] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+          <div className="relative bg-[#1b3a4b]/90 backdrop-blur-xl p-8 rounded-[1.4rem] h-full space-y-6">
+            <h3
+              className={`text-xs font-black uppercase tracking-[0.4em] bg-linear-to-r ${group.color} to-white bg-clip-text text-transparent`}
+            >
+              {group.category}
+            </h3>
 
-          <div className="text-[#006466] brightness-150 mb-4 transform group-hover:scale-110 transition-transform duration-300">
-            {cat.icon}
+            <div className="flex flex-wrap gap-2">
+              {group.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-slate-300 text-sm font-medium hover:text-emerald-400 hover:border-emerald-500/30 transition-all cursor-default"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-
-          <h3 className="text-xl font-bold text-white mb-2">{cat.name}</h3>
-          <p className="text-slate-400 text-sm leading-relaxed">
-            {cat.discription}
-          </p>
         </motion.div>
       ))}
     </div>
   );
 }
-
-export default About;
