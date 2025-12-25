@@ -54,10 +54,19 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  /* opacity: 0;
-  animation: fadeIn 50ms ease forwards; */
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 /* @keyframes FadeIn {
  from {
     opacity: 0;
@@ -97,4 +106,21 @@ body {
 }
 .animate-on-scroll:nth-child(4) {
   animation-delay: 0.4s;
+}
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-bg {
+  background: linear-gradient(-45deg, #0b132b, #010206, #1a0b2e, #051a1a);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
 }
