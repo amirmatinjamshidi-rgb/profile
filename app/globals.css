@@ -1,3 +1,5 @@
+/** @format */
+
 @import "tailwindcss";
 
 :root {
@@ -10,6 +12,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+@layer components {
+  .btn-purple-glow {
+    @apply relative overflow-hidden bg-[#312244] transition-all active:scale-95 disabled:opacity-50;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,18 +34,21 @@
   background: black;
 }
 
-
-
 @keyframes floatSoft {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 header {
   animation: floatSoft 3s ease-in-out infinite;
 }
-
 
 body {
   background: var(--background);
@@ -76,7 +86,15 @@ body {
   animation: fadeUp 0.9s ease-out forwards;
 }
 
-.animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
-.animate-on-scroll:nth-child(2) { animation-delay: 0.2s; }
-.animate-on-scroll:nth-child(3) { animation-delay: 0.3s; }
-.animate-on-scroll:nth-child(4) { animation-delay: 0.4s; }
+.animate-on-scroll:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.animate-on-scroll:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.animate-on-scroll:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.animate-on-scroll:nth-child(4) {
+  animation-delay: 0.4s;
+}

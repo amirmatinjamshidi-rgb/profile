@@ -1,99 +1,63 @@
 /** @format */
 
 "use client";
-
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-function Services() {
-  const myServices = [
-    {
-      id: 1,
-      name: "web development",
-      image: "/next.svg",
-      discription:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eligendi soluta est veniam sequi nemo.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eligendi soluta est veniam sequi nemo.",
-    },
-    {
-      id: 2,
-      name: "Game development",
-      image: "/next.svg",
-      discription:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eligendi soluta est veniam sequi nemo.",
-    },
-    {
-      id: 3,
-      name: "Digital connection",
-      image: "/next.svg",
-      discription:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eligendi soluta est veniam sequi nemo.",
-    },
-    {
-      id: 4,
-      name: "Fast Learner",
-      image: "/next.svg",
-      discription:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eligendi soluta est veniam sequi nemo.",
-    },
-  ];
+const myServices = [
+  {
+    id: 1,
+    name: "Web Development",
+    image: "/next.svg",
+    desc: "Building high-performance, scalable web applications with Next.js.",
+  },
+  {
+    id: 2,
+    name: "Systems Engineering",
+    image: "/next.svg",
+    desc: "Low-level performance optimization using C++ and Rust.",
+  },
+  {
+    id: 3,
+    name: "UI/UX Design",
+    image: "/next.svg",
+    desc: "Crafting intuitive user journeys and stunning visual interfaces.",
+  },
+  {
+    id: 4,
+    name: "Architecture",
+    image: "/next.svg",
+    desc: "Bridging on-chain and off-chain systems with reliable logic.",
+  },
+];
+
+export default function Services() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-20 py-30">
-      {myServices.map((cat, index) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-6 lg:px-20">
+      {myServices.map((service, index) => (
         <motion.div
-          key={cat.id}
+          key={service.id}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-          whileHover={{ scale: 1.05 }}
-          viewport={{ once: true, margin: "-90px" }}
-          className="
-    group bg-black p-6 
-    relative
-    transform  hover:scale-105
-   group rounded-3xl shadow-lg shadow-blue-800 
-            transition-all duration-500 ease-linear overflow-hidden
-            before:w-full before:h-full before:bg-blue-800
-            hover:before:left-0
-    before:content-[''] before:absolute before:top-0 before:-left-full
-    before:transition-all before:duration-500 before:z-0
-    group-hover:before:left-0
-  "
+          transition={{ delay: index * 0.1 }}
+          whileHover={{ y: -5 }}
+          className="group relative p-8 rounded-3xl bg-linear-to-br from-[#1b3a4b] to-[#212f45] border border-white/5 hover:border-[#006466]/50 transition-all duration-500 shadow-xl"
         >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="mb-4 relative z-1 flex justify-center"
-          >
+          <div className="mb-6 bg-[#006466]/20 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
             <Image
-              src={cat.image}
-              alt={cat.name}
-              height={60}
-              width={60}
+              src={service.image}
+              alt={service.name}
+              height={32}
+              width={32}
+              className="brightness-200"
             />
-          </motion.div>
-
-          <motion.h3
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.2, delay: index * 0.1 + 0.1 }}
-            className="text-cyan-400 mt-2 text-lg font-bold transition-colors duration-500 relative z-1 group-hover:text-white sm:text"
-          >
-            {cat.name}
-          </motion.h3>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
-            className="text-gray-400 text-sm mt-2 leading-relaxed transition-colors duration-500 relative z-1 group-hover:text-gray-100"
-          >
-            {cat.discription}
-          </motion.p>
+          </div>
+          <h3 className="text-xl font-bold text-white mb-3">{service.name}</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            {service.desc}
+          </p>
         </motion.div>
       ))}
     </div>
   );
 }
-
-export default Services;
