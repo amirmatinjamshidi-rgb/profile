@@ -7,25 +7,25 @@ const stackGroups = [
   {
     category: "Languages & Core",
     skills: ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3/SCSS"],
-    color: "from-[#006466]",
+    gradient: "from-[#006466] to-[#4fd8c1]",
     delay: 0.1,
   },
   {
     category: "Frameworks & Library",
-    skills: ["Next.js 15", "React.js", "Three.js", "Astro"],
-    color: "from-[#0b525b]",
+    skills: ["Next.js 16", "React.js", "Three.js", "GSAP"],
+    gradient: "from-[#0b525b] to-[#00ffe0]",
     delay: 0.2,
   },
   {
     category: "State & Data",
-    skills: ["Redux Toolkit", "Zustand", "React Query", "Context API"],
-    color: "from-[#3e1f47]",
+    skills: ["Redux Toolkit", "Zustand", "React Query", "Context API", "axios"],
+    gradient: "from-[#3e1f47] to-[#d47fff]",
     delay: 0.3,
   },
   {
     category: "Design & UI",
     skills: ["Tailwind CSS", "Framer Motion", "Material UI", "Shadcn/ui"],
-    color: "from-[#4d194d]",
+    gradient: "from-[#4d194d] to-[#ff80ff]",
     delay: 0.4,
   },
 ];
@@ -40,11 +40,11 @@ export default function TechStack() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: group.delay }}
           viewport={{ once: true }}
-          className="group relative p-px rounded-3xl bg-linear-to-br from-white/10 to-transparent hover:from-[#006466] transition-all duration-500"
+          className="group relative p-px rounded-3xl bg-linear-to-br from-white/10  hover:from-[#006466] transition-all duration-500"
         >
           <div className="relative bg-[#1b3a4b]/90 backdrop-blur-xl p-8 rounded-[1.4rem] h-full space-y-6">
             <h3
-              className={`text-xs font-black uppercase tracking-[0.4em] bg-linear-to-r ${group.color} to-white bg-clip-text text-transparent`}
+              className={`text-xs font-black uppercase tracking-[0.4em] bg-clip-text  bg-linear-to-r ${group.gradient} animate-glow`}
             >
               {group.category}
             </h3>

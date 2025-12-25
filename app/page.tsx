@@ -1,4 +1,11 @@
+/**
+ * eslint-disable @typescript-eslint/no-explicit-any
+ *
+ * @format
+ */
+
 /** @format */
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";
@@ -42,7 +49,7 @@ export default function Home() {
           scrub: 0.5,
         },
         scaleX: 1,
-        backgroundColor: "#4d194d",
+        backgroundColor: "#9d00ff",
         ease: "none",
       });
 
@@ -55,8 +62,7 @@ export default function Home() {
         delay: 0.5,
       });
 
-      const sections = gsap.utils.toArray(".reveal-section");
-      sections.forEach((section: any) => {
+      gsap.utils.toArray(".reveal-section").forEach((section: any) => {
         gsap.from(section, {
           scrollTrigger: {
             trigger: section,
@@ -75,23 +81,26 @@ export default function Home() {
   return (
     <>
       <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loader" />}
+        {isLoading && <LoadingScreen />}
       </AnimatePresence>
 
       <div
         ref={progressBarRef}
-        className="fixed top-0 left-0 h-1 w-full bg-[#006466] z-100 origin-left scale-x-0 shadow-[0_0_15px_#006466]"
+        className="fixed top-0 left-0 h-1 w-full bg-[#9d00ff] z-100 origin-left scale-x-0 shadow-[0_0_20px_#9d00ff]"
       />
 
       <div
         ref={containerRef}
-        className="relative min-h-screen w-full bg-[#0b132b] overflow-x-hidden"
+        className="relative min-h-screen w-full overflow-x-hidden"
       >
         <MechanicalScene />
+
+        <div className="fixed inset-0 z-0 pointer-events-none canvas-fade" />
+
         <Navbar />
 
         <main
-          className={`relative z-10 text-white selection:bg-[#4d194d] transition-opacity duration-1000 ${
+          className={`relative z-10 text-white transition-opacity duration-1000 ${
             isLoading ? "opacity-0" : "opacity-100"
           }`}
         >
@@ -99,25 +108,26 @@ export default function Home() {
             id="Home"
             className="min-h-screen flex flex-col md:flex-row items-center justify-center px-6 lg:px-24 gap-12"
           >
-            <div className="text-left space-y-6 max-w-4xl order-2 md:order-1">
-              <h1 className="hero-text text-6xl md:text-8xl font-black tracking-tighter">
+            <div className="text-center md:text-left space-y-6 max-w-4xl order-2 md:order-1">
+              <h1 className="hero-text text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none">
                 Amir Matin{" "}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-[#006466]">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-[#006466] green-glow">
                   Jamshidi
                 </span>
               </h1>
-              <p className="hero-text text-xl md:text-2xl font-medium text-emerald-200/60 uppercase tracking-widest">
+              <p className="hero-text text-lg md:text-2xl font-medium uppercase tracking-widest text-[#9d00ff] purple-glow">
                 Front-End Engineer & UI Architect
               </p>
             </div>
-            <div className="hero-text order-1 md:order-2">
+
+            <div className="hero-text order-1 md:order-2 flex justify-center">
               <Image
                 src="/shinji.png"
                 alt="pfp"
-                height={300}
                 width={300}
-                className="rounded-[3rem] border-2 border-white/10 shadow-2xl"
+                height={300}
                 priority
+                className="w-48 h-48 md:w-[300px] md:h-[300px] rounded-[3rem] border border-white/10 shadow-[0_0_40px_rgba(157,0,255,0.4)] object-cover"
               />
             </div>
           </section>
@@ -127,7 +137,7 @@ export default function Home() {
             className="reveal-section py-32 px-6"
           >
             <div className="max-w-6xl mx-auto space-y-16">
-              <h2 className="text-center text-4xl md:text-6xl font-black uppercase italic">
+              <h2 className="text-center text-3xl md:text-6xl font-black uppercase italic">
                 Tech <span className="text-[#006466]">Environment</span>
               </h2>
               <TechStack />
@@ -139,7 +149,7 @@ export default function Home() {
             className="reveal-section py-32 px-6"
           >
             <div className="max-w-6xl mx-auto space-y-16 text-center">
-              <h2 className="text-4xl md:text-6xl font-black uppercase">
+              <h2 className="text-3xl md:text-6xl font-black uppercase">
                 Selected Works
               </h2>
               <Projects />
@@ -151,7 +161,7 @@ export default function Home() {
             className="reveal-section py-32 px-6"
           >
             <div className="max-w-6xl mx-auto space-y-16 text-center">
-              <h2 className="text-4xl md:text-6xl font-black uppercase">
+              <h2 className="text-3xl md:text-6xl font-black uppercase">
                 Capabilities
               </h2>
               <Services />

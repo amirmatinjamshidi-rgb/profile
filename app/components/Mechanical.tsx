@@ -2,164 +2,182 @@
 
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-
-class LightEmitterCurve extends THREE.Curve<THREE.Vector3> {
-  radius: number;
-  turns: number;
-  height: number;
-  constructor(radius: number, turns: number, height: number) {
-    super();
-    this.radius = radius;
-    this.height = height;
-    this.turns = turns;
-  }
-  getPoint(t: number, optionalTarget = new THREE.Vector3()) {
-    return optionalTarget.setFromCylindricalCoords(
-      this.radius,
-      -Math.PI * 2 * this.turns * t,
-      this.height * t
-    );
-  }
-}
-
-class LightEmitters extends THREE.Object3D {
-  strands: THREE.Mesh[] = [];
-  constructor(
-    gu: any,
-    count: number,
-    maxR: number,
-    height: number,
-    turns: number,
-    color: number
-  ) {
-    super();
-    const gsBall: THREE.BufferGeometry[] = [];
-    const start = maxR / 4;
-    const step = (maxR * 0.9 - start) / (count - 1);
-    const mEmitters = new THREE.MeshBasicMaterial({
-      side: THREE.DoubleSide,
-      color: new THREE.Color(color),
-    });
-
-    mEmitters.onBeforeCompile = (shader) => {
-      shader.uniforms.globalBloom = gu.globalBloom;
-      shader.fragmentShader =
-        `uniform float globalBloom; ${shader.fragmentShader}`.replace(
-          `#include <dithering_fragment>`,
-          `gl_FragColor.rgb = mix(vec3(0.01), gl_FragColor.rgb, globalBloom);
-        #include <dithering_fragment>`
-        );
-    };
-
-    for (let i = 0; i < count; i++) {
-      const shift = start + step * i;
-      const gBall = new THREE.SphereGeometry(
-        0.04,
-        24,
-        12,
-        0,
-        Math.PI * 2,
-        0,
-        Math.PI * 0.5
-      );
-      gBall.translate(0, 0, shift);
-      gsBall.push(gBall);
-      const curve = new LightEmitterCurve(shift, turns, height);
-      const gTube = new THREE.TubeGeometry(curve, 160, 0.012, 8);
-      const mesh = new THREE.Mesh(gTube, mEmitters);
-      this.add(mesh);
-      this.strands.push(mesh);
-    }
-    const mBase = new THREE.MeshLambertMaterial({ color: 0x050505 });
-    this.add(new THREE.Mesh(mergeGeometries(gsBall), mBase));
-  }
-}
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
 export default function MechanicalScene() {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !mountRef.current) return;
+    if (!mountRef.current) return;
+
+    const isMobile = window.innerWidth < 768;
+    const DPR = Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2);
 
     const scene = new THREE.Scene();
+
     const camera = new THREE.PerspectiveCamera(
-      35,
+      40,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      200
     );
-    camera.position.set(0, 4, 22);
+    camera.position.set(0, 4, 26);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const renderer = new THREE.WebGLRenderer({
+      antialias: !isMobile,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
     renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(DPR);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
-    const gu = { globalBloom: { value: 1 } };
-    scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+    const scroll = { value: 0 };
+    const glow = { value: 1 };
 
-    const createDevice = (xPos: number, color: number) => {
-      const group = new THREE.Group();
-      const emitters = new LightEmitters(gu, 20, 2.0, 22, 1.8, color);
-      const core = new THREE.Mesh(
-        new THREE.CylinderGeometry(2.1, 2.1, 0.2, 32),
-        new THREE.MeshLambertMaterial({ color: 0x000000 })
-      );
-      group.add(core, emitters);
-      group.position.set(xPos, -7, 0);
-      return { group, emitters };
+    const onScroll = () => {
+      scroll.value =
+        window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      glow.value = 1 + Math.sin(scroll.value * Math.PI * 6) * 0.6;
     };
 
-    const leftDevice = createDevice(-12, 0x00ff88);
-    const rightDevice = createDevice(12, 0x9d00ff);
-    scene.add(leftDevice.group, rightDevice.group);
+    window.addEventListener("scroll", onScroll);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+    scene.background = null;
+    const material = new THREE.MeshBasicMaterial({
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.uTime = { value: 0 };
+      shader.uniforms.uGlow = glow;
+      shader.uniforms.uColorA = { value: new THREE.Color("#00ff88") };
+      shader.uniforms.uColorB = { value: new THREE.Color("#9d00ff") };
+
+      shader.vertexShader =
+        `
+        varying float vY;
+      ` +
+        shader.vertexShader.replace(
+          `#include <begin_vertex>`,
+          `
+          #include <begin_vertex>
+          vY = position.y;
+        `
+        );
+
+      shader.fragmentShader =
+        `
+        uniform float uTime;
+        uniform float uGlow;
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        varying float vY;
+      ` +
+        shader.fragmentShader.replace(
+          `#include <dithering_fragment>`,
+          `
+          float noise = sin(vY * 0.35 + uTime * 2.5) * 0.5 + 0.5;
+          vec3 color = mix(uColorA, uColorB, noise);
+          gl_FragColor.rgb = color * uGlow;
+          #include <dithering_fragment>
+        `
+        );
+
+      material.userData.shader = shader;
+    };
+
+    const makeSpiral = (x: number) => {
+      const points = [];
+      const steps = isMobile ? 28 : 42;
+
+      for (let i = 0; i < steps; i++) {
+        const t = i / steps;
+        points.push(
+          new THREE.Vector3(
+            Math.cos(t * Math.PI * 4) * 2,
+            t * 18,
+            Math.sin(t * Math.PI * 4) * 2
+          )
+        );
+      }
+
+      const curve = new THREE.CatmullRomCurve3(points);
+      const geometry = new THREE.TubeGeometry(
+        curve,
+        isMobile ? 90 : 160,
+        isMobile ? 0.04 : 0.05,
+        6,
+        false
+      );
+
+      const mesh = new THREE.Mesh(geometry, material);
+      const group = new THREE.Group();
+      group.add(mesh);
+      group.position.set(x, -9, 0);
+
+      return group;
+    };
+
+    const left = makeSpiral(-10);
+    const right = makeSpiral(10);
+
+    scene.add(left, right);
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     composer.addPass(
       new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        2.2,
-        0.4,
-        0.8
+        isMobile ? 0.9 : 1.0,
+
+        0.3,
+        0.4
       )
     );
 
-    let animationFrameId: number;
+    let raf = 0;
+
     const animate = () => {
-      const t = performance.now() * 0.0009;
-      leftDevice.group.rotation.y = t * 0.4;
-      leftDevice.emitters.strands.forEach(
-        (s, i) => (s.rotation.y = t * (0.5 + i * 0.02))
-      );
-      rightDevice.group.rotation.y = -t * 0.4;
-      rightDevice.emitters.strands.forEach(
-        (s, i) => (s.rotation.y = -t * (0.5 + i * 0.02))
-      );
-      leftDevice.group.position.y = -7 + Math.sin(t) * 0.4;
-      rightDevice.group.position.y = -7 + Math.cos(t) * 0.4;
+      const t = performance.now() * 0.001;
+
+      left.rotation.y = t * 0.45;
+      right.rotation.y = -t * 0.45;
+
+      left.position.y = -9 + Math.sin(t + scroll.value * 5) * 0.7;
+      right.position.y = -9 + Math.cos(t + scroll.value * 5) * 0.7;
+
+      const shader = material.userData.shader;
+      if (shader) shader.uniforms.uTime.value = t;
+
       composer.render();
-      animationFrameId = requestAnimationFrame(animate);
+      raf = requestAnimationFrame(animate);
     };
+
     animate();
 
-    const handleResize = () => {
+    const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
     };
-    window.addEventListener("resize", handleResize);
+
+    window.addEventListener("resize", onResize);
+
     return () => {
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      renderer.dispose();
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, []);
@@ -167,7 +185,7 @@ export default function MechanicalScene() {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 z-0 pointer-events-none bg-transparent"
+      className="fixed inset-0 z-0 pointer-events-none"
     />
   );
 }
