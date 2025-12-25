@@ -134,14 +134,14 @@ export default function Contact() {
         >
           <div
             className="
-    absolute inset-0 bg-gradient-to-r from-[#4d194d] to-[#3e1f47] 
+    absolute inset-0 bg-linear-to-r from-[#4d194d] to-[#3e1f47] 
     opacity-100 group-hover:opacity-0 transition-opacity duration-500 ease-in-out
   "
           />
 
           <div
             className="
-    absolute inset-0 bg-gradient-to-r from-[#3e1f47] to-[#4d194d] 
+    absolute inset-0 bg-linear-to-r from-[#3e1f47] to-[#4d194d] 
     opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out
   "
           />
