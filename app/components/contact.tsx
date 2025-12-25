@@ -57,11 +57,11 @@ export default function Contact() {
         </p>
         <div className="space-y-6 pt-6 border-l-2 border-[#4d194d] pl-6">
           <ContactDetail
-            icon="envelope"
+            icon="email.png"
             label="amirmatinjamshidi@gmail.com"
           />
           <ContactDetail
-            icon="location-dot"
+            icon="Link.png"
             label="Tehran, Iran"
           />
         </div>
