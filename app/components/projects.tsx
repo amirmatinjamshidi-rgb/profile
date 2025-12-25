@@ -30,7 +30,7 @@ const projects = [
   {
     id: 3,
     title: "Hotel Mojan",
-    desc: "Exploring the bridge between complex data systems and visual clarity using Framer Motion.",
+    desc: "A hotel in Chabahar, fully develped backend and front end with a team, with user and admin panel.",
     tech: ["React", "Next.js", "TypeScript"],
     link: "#",
     github: "#",
