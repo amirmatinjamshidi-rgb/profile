@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
+import HandScroll from "./components/HandScroll";
 import Navbar from "./components/Navbar";
 import TechStack from "./components/about";
 import Projects from "./components/projects";
@@ -73,6 +73,7 @@ export default function Home() {
 
   return (
     <>
+      <HandScroll />
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>

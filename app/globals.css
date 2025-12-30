@@ -124,3 +124,13 @@ body {
 .glow-bar {
   animation: glowPulse 1.5s ease-in-out infinite;
 }
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 10;
+  pointer-events: none;
+}
