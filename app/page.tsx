@@ -1,14 +1,8 @@
-/**
- * eslint-disable @typescript-eslint/no-explicit-any
- *
- * @format
- */
-
 /** @format */
 
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -22,6 +16,7 @@ import Services from "./components/Services";
 import Contact from "./components/contact";
 import LoadingScreen from "./components/Loading";
 import MechanicalScene from "./components/Mechanical";
+import ParticleNetwork from "./components/effect";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -32,14 +27,11 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 3500);
-    return () => clearTimeout(timer);
-  }, []);
-
   useGSAP(
     () => {
       if (isLoading) return;
+
+      ScrollTrigger.refresh();
 
       gsap.to(progressBarRef.current, {
         scrollTrigger: {
@@ -59,14 +51,15 @@ export default function Home() {
         duration: 1,
         stagger: 0.2,
         ease: "power3.out",
-        delay: 0.5,
+        delay: 0.2,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       gsap.utils.toArray(".reveal-section").forEach((section: any) => {
         gsap.from(section, {
           scrollTrigger: {
             trigger: section,
-            start: "top 80%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
@@ -81,7 +74,7 @@ export default function Home() {
   return (
     <>
       <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen />}
+        {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
       </AnimatePresence>
 
       <div
@@ -91,16 +84,20 @@ export default function Home() {
 
       <div
         ref={containerRef}
-        className="relative min-h-screen w-full overflow-x-hidden"
+        className={`relative min-h-screen w-full overflow-x-hidden bg-[#010206] ${
+          isLoading ? "max-h-screen overflow-hidden" : ""
+        }`}
       >
-        <MechanicalScene />
+        <div className="fixed inset-0 z-0">
+          <MechanicalScene />
+        </div>
 
-        <div className="fixed inset-0 z-0 pointer-events-none canvas-fade" />
+        <ParticleNetwork />
 
         <Navbar />
 
         <main
-          className={`relative z-10 text-white transition-opacity duration-1000 ${
+          className={`relative z-20 text-white transition-opacity duration-1000 ${
             isLoading ? "opacity-0" : "opacity-100"
           }`}
         >
@@ -121,14 +118,16 @@ export default function Home() {
             </div>
 
             <div className="hero-text order-1 md:order-2 flex justify-center">
-              <Image
-                src="/shinji.png"
-                alt="pfp"
-                width={300}
-                height={300}
-                priority
-                className="w-48 h-48 md:w-[300px] md:h-[300px] rounded-[3rem] border border-white/10 shadow-[0_0_40px_rgba(157,0,255,0.4)] object-cover"
-              />
+              <div className="rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(157,0,255,0.4)]">
+                <Image
+                  src="/shinji.png"
+                  alt="pfp"
+                  width={300}
+                  height={300}
+                  priority
+                  className="w-48 h-48 md:w-[300px] md:h-[300px] object-cover"
+                />
+              </div>
             </div>
           </section>
 
