@@ -17,6 +17,7 @@ import Contact from "./components/contact";
 import LoadingScreen from "./components/Loading";
 import MechanicalScene from "./components/Mechanical";
 import ParticleNetwork from "./components/effect";
+import SecurityTab from "./components/SecurityTab";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -24,12 +25,13 @@ if (typeof window !== "undefined") {
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isLocked, setIsLocked] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      if (isLoading) return;
+      if (isLoading || isLocked) return;
 
       ScrollTrigger.refresh();
 
@@ -68,15 +70,19 @@ export default function Home() {
         });
       });
     },
-    { scope: containerRef, dependencies: [isLoading] }
+    { scope: containerRef, dependencies: [isLoading, isLocked] }
   );
 
   return (
     <>
-      <HandScroll />
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen onFinished={() => setIsLoading(false)} />}
+        {!isLoading && isLocked && (
+          <SecurityTab onUnlocked={() => setIsLocked(false)} />
+        )}
       </AnimatePresence>
+
+      {!isLocked && <HandScroll />}
 
       <div
         ref={progressBarRef}
@@ -86,7 +92,7 @@ export default function Home() {
       <div
         ref={containerRef}
         className={`relative min-h-screen w-full overflow-x-hidden bg-[#010206] ${
-          isLoading ? "max-h-screen overflow-hidden" : ""
+          isLoading || isLocked ? "max-h-screen overflow-hidden" : ""
         }`}
       >
         <div className="fixed inset-0 z-0">
@@ -95,11 +101,11 @@ export default function Home() {
 
         <ParticleNetwork />
 
-        <Navbar />
+        {!isLocked && <Navbar />}
 
         <main
           className={`relative z-20 text-white transition-opacity duration-1000 ${
-            isLoading ? "opacity-0" : "opacity-100"
+            isLoading || isLocked ? "opacity-0" : "opacity-100"
           }`}
         >
           <section

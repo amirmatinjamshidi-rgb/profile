@@ -86,7 +86,7 @@ export default function HandScroll() {
             scrollData.current.isFirstPinch = false;
           }
 
-          const deltaY = (handY - scrollData.current.lastHandY) * 1.25;
+          const deltaY = (handY - scrollData.current.lastHandY) * 1.22;
           scrollData.current.targetY +=
             deltaY * document.documentElement.scrollHeight;
           scrollData.current.lastHandY = handY;
