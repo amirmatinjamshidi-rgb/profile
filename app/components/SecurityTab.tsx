@@ -25,14 +25,13 @@ export default function SecurityTab({
   const videoRef = useRef<HTMLVideoElement>(null);
   const requestRef = useRef<number>(0);
   const detectorRef = useRef<HandLandmarker | null>(null);
-  // const lastDetectionTime = useRef<number>(0);
   const gestureStartTime = useRef<number | null>(null);
 
   const HOLD_DURATION = 1500; // 1.5 seconds
 
   const sequence = useMemo(
     () => [
-      { id: 1, label: "PROTOCOL: THUMBS UP", icon: "👍" },
+      { id: 1, label: "PROTOCOL: FIST", icon: "✊" },
       { id: 2, label: "GRANT: OPEN PALM", icon: "✋" },
       { id: 3, label: "VERIFY: VICTORY", icon: "✌️" },
     ],
