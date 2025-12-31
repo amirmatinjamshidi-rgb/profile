@@ -21,13 +21,13 @@ export default function SecurityTab({
   const [active, setActive] = useState(false);
   const [isWaitingForRelease, setIsWaitingForRelease] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
-
+  const [permission, setPermission] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const requestRef = useRef<number>(0);
   const detectorRef = useRef<HandLandmarker | null>(null);
   const gestureStartTime = useRef<number | null>(null);
 
-  const HOLD_DURATION = 1500; // 1.5 seconds
+  const HOLD_DURATION = 1500;
 
   const sequence = useMemo(
     () => [
@@ -37,6 +37,37 @@ export default function SecurityTab({
     ],
     []
   );
+
+  const handleStartScanner = async () => {
+    setPermission(true);
+    try {
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.10/wasm"
+      );
+      detectorRef.current = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+          delegate: "GPU",
+        },
+        runningMode: "VIDEO",
+      });
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 1280, height: 720 },
+      });
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current?.play();
+          setActive(true);
+        };
+      }
+    } catch (err) {
+      console.error("Neural Link Failure", err);
+      setPermission(false);
+    }
+  };
 
   const indices = useMemo(
     () => ({
@@ -183,13 +214,14 @@ export default function SecurityTab({
       exit={{ opacity: 0, scale: 1.05 }}
       className="fixed inset-0 z-200 bg-[#05070c] flex flex-col items-center justify-center p-6 text-white font-mono"
     >
+      {/* Video Preview Overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
           muted
           playsInline
-          className="hidden "
+          className="w-full h-full object-cover grayscale scale-x-[-1]"
         />
       </div>
 
@@ -203,67 +235,91 @@ export default function SecurityTab({
           </p>
         </div>
 
-        <div className="flex justify-center gap-4">
-          {sequence.map((item, i) => (
-            <div
-              key={item.id}
-              className={`relative w-16 h-16 rounded-xl border-2 flex items-center justify-center text-2xl transition-all duration-500 ${
-                step > i
-                  ? "bg-emerald-500 border-emerald-400 shadow-[0_0_20px_#10b981]"
-                  : step === i
-                  ? "border-emerald-500 bg-emerald-500/10"
-                  : "border-white/10 opacity-30"
-              }`}
+        {/* Conditional Rendering: Button vs Scanner UI */}
+        {!setPermission ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center gap-6"
+          >
+            <p className="text-white/60 text-sm max-w-[280px]">
+              Access restricted. Initialize neural link to proceed with
+              biometric verification.
+            </p>
+            <button
+              onClick={handleStartScanner}
+              className="group relative px-8 py-4 bg-transparent border border-emerald-500/50 hover:border-emerald-500 transition-all duration-300"
             >
-              {step > i ? "✓" : item.icon}
-              {step === i && holdProgress > 0 && (
-                <svg className="absolute inset-0 w-full h-full -rotate-90">
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="30"
-                    fill="transparent"
-                    stroke="#10b981"
-                    strokeWidth="4"
-                    strokeDasharray="188.5"
-                    strokeDashoffset={188.5 - (188.5 * holdProgress) / 100}
-                    className="transition-all duration-100 ease-linear"
-                  />
-                </svg>
-              )}
+              <div className="absolute inset-0 bg-emerald-500/10 group-hover:bg-emerald-500/20 transition-all" />
+              <span className="relative text-emerald-400 font-bold tracking-widest text-sm">
+                INITIALIZE LINK
+              </span>
+            </button>
+          </motion.div>
+        ) : (
+          <div className="space-y-10">
+            <div className="flex justify-center gap-4">
+              {sequence.map((item, i) => (
+                <div
+                  key={item.id}
+                  className={`relative w-16 h-16 rounded-xl border-2 flex items-center justify-center text-2xl transition-all duration-500 ${
+                    step > i
+                      ? "bg-emerald-500 border-emerald-400 shadow-[0_0_20px_#10b981]"
+                      : step === i
+                      ? "border-emerald-500 bg-emerald-500/10"
+                      : "border-white/10 opacity-30"
+                  }`}
+                >
+                  {step > i ? "✓" : item.icon}
+                  {step === i && holdProgress > 0 && (
+                    <svg className="absolute inset-0 w-full h-full -rotate-90">
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="30"
+                        fill="transparent"
+                        stroke="#10b981"
+                        strokeWidth="4"
+                        strokeDasharray="188.5"
+                        strokeDashoffset={188.5 - (188.5 * holdProgress) / 100}
+                        className="transition-all duration-100 ease-linear"
+                      />
+                    </svg>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div className="h-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={isWaitingForRelease ? "release" : step}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              className={`text-[10px] tracking-widest uppercase font-bold ${
-                isWaitingForRelease ? "text-emerald-400" : "text-[#9d00ff]"
-              }`}
-            >
-              {isWaitingForRelease
-                ? "RESET HAND POSITION"
-                : step < 3
-                ? `HOLD ${sequence[step].label.split(": ")[1]}`
-                : "ACCESS GRANTED"}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            <div className="h-8">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isWaitingForRelease ? "release" : step}
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -10, opacity: 0 }}
+                  className={`text-[10px] tracking-widest uppercase font-bold ${
+                    isWaitingForRelease ? "text-emerald-400" : "text-[#9d00ff]"
+                  }`}
+                >
+                  {isWaitingForRelease
+                    ? "RESET HAND POSITION"
+                    : step < 3
+                    ? `HOLD ${sequence[step].label.split(": ")[1]}`
+                    : "ACCESS GRANTED"}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        )}
 
         <div className="w-full h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
         <p className="text-[9px] text-white/40 uppercase tracking-[0.2em]">
-          {holdProgress > 0
-            ? `Verifying... ${Math.round(holdProgress)}%`
-            : "Awaiting Scan"}
-        </p>
-        <p className="text-[22px] text-pink-600 uppercase">
-          Whrn reseting, shape your hands to fist for recognition{" "}
+          {permission
+            ? holdProgress > 0
+              ? `Verifying... ${Math.round(holdProgress)}%`
+              : "Awaiting Scan"
+            : "System Offline"}
         </p>
       </div>
     </motion.div>
