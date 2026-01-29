@@ -70,7 +70,7 @@ export default function Home() {
         });
       });
     },
-    { scope: containerRef, dependencies: [isLoading, isLocked] }
+    { scope: containerRef, dependencies: [isLoading, isLocked] },
   );
 
   return (

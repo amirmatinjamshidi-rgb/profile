@@ -35,14 +35,14 @@ export default function SecurityTab({
       { id: 2, label: "GRANT: OPEN PALM", icon: "✋" },
       { id: 3, label: "VERIFY: VICTORY", icon: "✌️" },
     ],
-    []
+    [],
   );
 
   const handleStartScanner = async () => {
     setPermission(true);
     try {
       const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.10/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.10/wasm",
       );
       detectorRef.current = await HandLandmarker.createFromOptions(vision, {
         baseOptions: {
@@ -75,7 +75,7 @@ export default function SecurityTab({
       pips: { thumb: 2, index: 6, middle: 10, ring: 14, pinky: 18 },
       mcp: { index: 5, middle: 9, ring: 13, pinky: 17 },
     }),
-    []
+    [],
   );
 
   const isUp = useCallback(
@@ -85,7 +85,7 @@ export default function SecurityTab({
       }
       return hand[indices.tips[finger]].y < hand[indices.pips[finger]].y;
     },
-    [indices]
+    [indices],
   );
 
   const validateGesture = useCallback(
@@ -110,14 +110,14 @@ export default function SecurityTab({
       }
       return false;
     },
-    [isUp]
+    [isUp],
   );
 
   useEffect(() => {
     const init = async () => {
       try {
         const vision = await FilesetResolver.forVisionTasks(
-          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.10/wasm"
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.10/wasm",
         );
         detectorRef.current = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
@@ -147,6 +147,7 @@ export default function SecurityTab({
     return () => {
       detectorRef.current?.close();
       if (videoRef.current?.srcObject) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         (videoRef.current.srcObject as MediaStream)
           .getTracks()
           .forEach((t) => t.stop());
@@ -235,8 +236,7 @@ export default function SecurityTab({
           </p>
         </div>
 
-        {/* Conditional Rendering: Button vs Scanner UI */}
-        {!setPermission ? (
+        {!setPermission ?
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -256,18 +256,16 @@ export default function SecurityTab({
               </span>
             </button>
           </motion.div>
-        ) : (
-          <div className="space-y-10">
+        : <div className="space-y-10">
             <div className="flex justify-center gap-4">
               {sequence.map((item, i) => (
                 <div
                   key={item.id}
                   className={`relative w-16 h-16 rounded-xl border-2 flex items-center justify-center text-2xl transition-all duration-500 ${
-                    step > i
-                      ? "bg-emerald-500 border-emerald-400 shadow-[0_0_20px_#10b981]"
-                      : step === i
-                      ? "border-emerald-500 bg-emerald-500/10"
-                      : "border-white/10 opacity-30"
+                    step > i ?
+                      "bg-emerald-500 border-emerald-400 shadow-[0_0_20px_#10b981]"
+                    : step === i ? "border-emerald-500 bg-emerald-500/10"
+                    : "border-white/10 opacity-30"
                   }`}
                 >
                   {step > i ? "✓" : item.icon}
@@ -301,25 +299,25 @@ export default function SecurityTab({
                     isWaitingForRelease ? "text-emerald-400" : "text-[#9d00ff]"
                   }`}
                 >
-                  {isWaitingForRelease
-                    ? "RESET HAND POSITION"
-                    : step < 3
-                    ? `HOLD ${sequence[step].label.split(": ")[1]}`
-                    : "ACCESS GRANTED"}
+                  {isWaitingForRelease ?
+                    "RESET HAND POSITION"
+                  : step < 3 ?
+                    `HOLD ${sequence[step].label.split(": ")[1]}`
+                  : "ACCESS GRANTED"}
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
-        )}
+        }
 
         <div className="w-full h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
         <p className="text-[9px] text-white/40 uppercase tracking-[0.2em]">
-          {permission
-            ? holdProgress > 0
-              ? `Verifying... ${Math.round(holdProgress)}%`
-              : "Awaiting Scan"
-            : "System Offline"}
+          {permission ?
+            holdProgress > 0 ?
+              `Verifying... ${Math.round(holdProgress)}%`
+            : "Awaiting Scan"
+          : "System Offline"}
         </p>
       </div>
     </motion.div>
